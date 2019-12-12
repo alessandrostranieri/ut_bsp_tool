@@ -1,2 +1,2 @@
-# ut_bsp_tool
+# Binary Space Partitioning
 Tool To Visualize Binary Space Partitioning
