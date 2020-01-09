@@ -17,8 +17,20 @@ add_executable(bsp_tool
   main.cpp
   mainwindow.cpp
   mainwindow.h
+  player.cpp
+  player.h
+  polygon.cpp
+  polygon.h
   mainwindow.ui
   ut_bsp_tool.qrc
 )
 
 target_link_libraries(bsp_tool PRIVATE Qt5::Widgets)
+
+add_executable(create_world
+    create_world.cpp
+    player.cpp
+    player.h
+)
+
+target_link_libraries(create_world PRIVATE Qt5::Widgets)
