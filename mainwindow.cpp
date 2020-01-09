@@ -3,6 +3,7 @@
 #include "player.h"
 #include "polygon.h"
 
+#include <QDebug>
 #include <QFile>
 #include <QGraphicsScene>
 #include <QJsonArray>
@@ -41,8 +42,9 @@ void MainWindow::render_world() {
   Player player;
   player.read(world_json["player"].toObject());
 
-  ui->world_gv->scene()->addEllipse(QRect{QPoint{5, 5}, QPoint{15, 15}},
-                                    QPen{Qt::red});
+  ui->world_gv->scene()->addEllipse(
+      QRect{player.position() - QPoint{5, 5}, player.position() + QPoint{5, 5}},
+      QPen{Qt::red});
 
   std::vector<Polygon> polygons;
   const QJsonArray polygons_json = world_json["polygons"].toArray();
