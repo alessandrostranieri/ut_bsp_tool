@@ -2,54 +2,78 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>988</width>
-    <height>623</height>
+    <width>1220</width>
+    <height>719</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>BSP Visualization Tool</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(0, 0, 0);</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>10</y>
-      <width>941</width>
-      <height>521</height>
+      <width>1201</width>
+      <height>641</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QFrame" name="world_frame">
+       <property name="minimumSize">
+        <size>
+         <width>640</width>
+         <height>440</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">border-color: rgb(255, 255, 255);</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::Panel</enum>
        </property>
-       <widget class="QWidget" name="verticalLayoutWidget">
+       <widget class="QWidget" name="">
         <property name="geometry">
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>451</width>
-          <height>501</height>
+          <width>621</width>
+          <height>621</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMaximumSize</enum>
+         </property>
          <item>
           <widget class="QLabel" name="label">
            <property name="styleSheet">
             <string notr="true">font: 10pt &quot;Monospace&quot;;
-background-color: rgb(0, 0, 0);
+background-color: rgb(85, 85, 127);
 color: rgb(255, 255, 255);</string>
            </property>
            <property name="text">
@@ -64,6 +88,23 @@ color: rgb(255, 255, 255);</string>
           <widget class="QGraphicsView" name="world_gv">
            <property name="enabled">
             <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="interactive">
+            <bool>true</bool>
+           </property>
+           <property name="sceneRect">
+            <rectf>
+             <x>-300.000000000000000</x>
+             <y>-200.000000000000000</y>
+             <width>600.000000000000000</width>
+             <height>400.000000000000000</height>
+            </rectf>
            </property>
           </widget>
          </item>
@@ -82,10 +123,10 @@ color: rgb(255, 255, 255);</string>
        <widget class="QWidget" name="verticalLayoutWidget_2">
         <property name="geometry">
          <rect>
-          <x>9</x>
-          <y>9</y>
-          <width>451</width>
-          <height>501</height>
+          <x>10</x>
+          <y>10</y>
+          <width>531</width>
+          <height>621</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -93,8 +134,8 @@ color: rgb(255, 255, 255);</string>
           <widget class="QLabel" name="label_2">
            <property name="styleSheet">
             <string notr="true">font: 10pt &quot;Monospace&quot;;
-background-color: rgb(0, 0, 0);
-color: rgb(255, 255, 255);</string>
+color: rgb(255, 255, 255);
+background-color: rgb(85, 85, 127);</string>
            </property>
            <property name="text">
             <string>BSP View</string>
@@ -130,7 +171,7 @@ color: rgb(255, 255, 255);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>988</width>
+     <width>1220</width>
      <height>31</height>
     </rect>
    </property>

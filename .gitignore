@@ -1,2 +1,3 @@
 /CMakeLists.txt.user
-cmake_build_debug/**
+cmake-build-debug/**
+.idea

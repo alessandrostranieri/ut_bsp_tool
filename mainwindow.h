@@ -19,6 +19,6 @@ private:
     Ui::MainWindow *ui;
 
 private:
-    void render_polygons();
+    void render_world();
 };
 #endif // MAINWINDOW_H
