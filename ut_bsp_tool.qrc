@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>worlds/world_01.json</file>
+    </qresource>
+</RCC>
