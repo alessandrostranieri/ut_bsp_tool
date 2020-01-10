@@ -1,4 +1,4 @@
-#include "player.h"
+#include "../bsp/player.h"
 
 #include <QCoreApplication>
 #include <QFile>

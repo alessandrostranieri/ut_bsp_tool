@@ -1,7 +1,7 @@
 #include "mainwindow.h"
+#include "../bsp/player.h"
+#include "../bsp/polygon.h"
 #include "./ui_mainwindow.h"
-#include "player.h"
-#include "polygon.h"
 
 #include <QDebug>
 #include <QFile>
