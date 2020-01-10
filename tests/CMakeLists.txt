@@ -1,3 +1,4 @@
 add_executable(tests tests.cpp)
-target_link_libraries(tests PRIVATE GTest::GTest GTest::Main)
+target_link_libraries(tests PRIVATE my_bsp GTest::GTest GTest::Main)
+target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR})
 add_test(NAME tests COMMAND tests)
