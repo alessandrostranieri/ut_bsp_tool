@@ -1,5 +1,7 @@
 #include "bsp.h"
 
+#include <cassert>
+
 constexpr std::int32_t SPLIT_IMPORTANCE = 8;
 
 PointWrtLine PointOnSide(const QPoint& point, const WorldLine& word_line) {
@@ -67,4 +69,43 @@ std::optional<size_t> SelectBestSplitter(const std::vector<WorldLine>& lines) {
     }
   }
   return best_splitter_index;
+}
+
+BspNode BuildBspTree(std::vector<WorldLine> lines) {
+
+  BspNode node;
+  // SELECT BEST SPLIT
+  auto best_split_index = SelectBestSplitter(lines);
+
+  if (!best_split_index.has_value()) {
+    // NO SPLIT MEANS NO LINES OR ALL LINES CAN BE PRINTED AT THE SAME TIME
+    node.lines = lines;
+  } else {
+    // APPLY SPLIT
+    // LEFT LINES
+    // RIGHT LINES
+
+    // RECURSE CONSTRUCTION
+  }
+  return node;
+}
+
+SplitResult SplitLine(const WorldLine& line, const WorldLine& split_line) {
+  QPointF intersection;
+  QLineF::IntersectType intersect_type =
+      QLineF(line.p0(), line.p1())
+          .intersect(QLineF(split_line.p0(), split_line.p1()), &intersection);
+
+  assert(intersect_type != QLineF::IntersectType::NoIntersection);
+  PointWrtLine p0_side = PointOnSide(line.p0(), split_line);
+
+  if (p0_side == PointWrtLine::FRONT) {
+    return SplitResult{
+        WorldLine{QLine{line.p0(), intersection.toPoint()}, line.normal()},
+        WorldLine{QLine{intersection.toPoint(), line.p1()}, line.normal()}};
+  } else { // P1 in front
+    return SplitResult{
+        WorldLine{QLine{intersection.toPoint(), line.p1()}, line.normal()},
+        WorldLine{QLine{line.p0(), intersection.toPoint()}, line.normal()}};
+  }
 }
