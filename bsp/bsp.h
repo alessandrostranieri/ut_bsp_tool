@@ -32,4 +32,12 @@ struct BspNode {
 
 BspNode BuildBspTree(std::vector<WorldLine> lines);
 
+struct PartitionResult {
+  std::vector<WorldLine> front;
+  std::vector<WorldLine> back;
+};
+
+PartitionResult PartitionLines(std::vector<WorldLine> lines,
+                               const WorldLine& split_line);
+
 #endif // BSP_H

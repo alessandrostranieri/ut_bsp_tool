@@ -20,15 +20,20 @@ LineWrtLine LineOnSide(const WorldLine& line, const WorldLine& dividing_line) {
   const auto point_on_side_1 = PointOnSide(line.p0(), dividing_line);
   const auto point_on_side_2 = PointOnSide(line.p1(), dividing_line);
 
-  if (point_on_side_1 == point_on_side_2) {
-    if (point_on_side_1 == PointWrtLine::FRONT ||
-        point_on_side_1 == PointWrtLine::COLINEAR) {
-      return LineWrtLine::FRONT;
-    } else {
-      return LineWrtLine::BACK;
-    }
-  } else {
+  if (point_on_side_1 == PointWrtLine::BACK &&
+      point_on_side_2 == PointWrtLine::FRONT) {
     return LineWrtLine::INTERSECT;
+  } else if (point_on_side_1 == PointWrtLine::FRONT &&
+             point_on_side_2 == PointWrtLine::BACK) {
+    return LineWrtLine::INTERSECT;
+  } else if (point_on_side_1 == PointWrtLine::FRONT ||
+             point_on_side_2 == PointWrtLine::FRONT) {
+    return LineWrtLine::FRONT;
+  } else if (point_on_side_1 == PointWrtLine::BACK ||
+             point_on_side_2 == PointWrtLine::BACK) {
+    return LineWrtLine::BACK;
+  } else {
+    return LineWrtLine::FRONT;
   }
 }
 
@@ -108,4 +113,33 @@ SplitResult SplitLine(const WorldLine& line, const WorldLine& split_line) {
         WorldLine{QLine{intersection.toPoint(), line.p1()}, line.normal()},
         WorldLine{QLine{line.p0(), intersection.toPoint()}, line.normal()}};
   }
+}
+
+PartitionResult PartitionLines(std::vector<WorldLine> lines,
+                               const WorldLine& split_line) {
+  PartitionResult result;
+  while (!lines.empty()) {
+    // REMOVE LAST ELEMENT
+    auto last = lines.back();
+    lines.pop_back();
+    if (last != split_line) {
+      auto side = LineOnSide(last, split_line);
+      switch (side) {
+      case (LineWrtLine::FRONT):
+        result.front.push_back(last);
+        break;
+      case (LineWrtLine::BACK):
+        result.back.push_back(last);
+        break;
+      case (LineWrtLine::INTERSECT):
+        auto split_result = SplitLine(last, split_line);
+        result.front.push_back(split_result.front);
+        result.back.push_back(split_result.back);
+        break;
+      }
+    } else {
+      result.front.push_back(last);
+    }
+  }
+  return result;
 }

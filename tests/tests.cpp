@@ -34,6 +34,26 @@ TEST(BspTests, TestLineOnSide_Back) {
   EXPECT_EQ(side, LineWrtLine::BACK);
 }
 
+TEST(BspTests, TestLineOnSide_JoinedLines_01) {
+  auto line = WorldLine{QLine{QPoint{2, 8}, QPoint{2, 10}}, QPoint{-1, 0}};
+  auto dividing_line =
+      WorldLine{QLine{QPoint{2, 8}, QPoint{8, 8}}, QPoint{0, -1}};
+
+  auto side = LineOnSide(line, dividing_line);
+
+  EXPECT_EQ(side, LineWrtLine::BACK);
+}
+
+TEST(BspTests, TestLineOnSide_JoinedLines_02) {
+  auto line = WorldLine{QLine{QPoint{8, 8}, QPoint{8, 10}}, QPoint{1, 0}};
+  auto dividing_line =
+      WorldLine{QLine{QPoint{2, 8}, QPoint{8, 8}}, QPoint{0, -1}};
+
+  auto side = LineOnSide(line, dividing_line);
+
+  EXPECT_EQ(side, LineWrtLine::BACK);
+}
+
 TEST(BspTests, TestLineOnSide_Split) {
   auto line = WorldLine{QLine{QPoint{8, 2}, QPoint{7, 5}}, QPoint{}};
   auto dividing_line =
@@ -86,7 +106,7 @@ TEST(BspTests, TestCutLine_P1_in_front) {
             WorldLine(QLine(QPoint(8, 2), QPoint(7, 4)), QPoint(3, 1)));
 }
 
-TEST(BspTests, TestBuildBspTree) {
+TEST(BspTests, TestPartitionLines) {
   // A
   auto line_01 = WorldLine{QLine{QPoint{2, 8}, QPoint{8, 8}}, QPoint{0, -1}};
   auto line_02 = WorldLine{QLine{QPoint{8, 8}, QPoint{8, 10}}, QPoint{1, 0}};
@@ -100,6 +120,31 @@ TEST(BspTests, TestBuildBspTree) {
   // LIST OF LINES
   const std::vector<WorldLine> lines{line_01, line_02, line_03, line_04,
                                      line_05, line_06, line_07, line_08};
+  const auto splitter =
+      WorldLine{QLine{QPoint{2, 8}, QPoint{8, 8}}, QPoint{0, -1}};
+  const PartitionResult partition_result = PartitionLines(lines, splitter);
 
-  BspNode bspNode = BuildBspTree(lines);
+  EXPECT_THAT(partition_result.back,
+              UnorderedElementsAreArray({line_02, line_03, line_04}));
+  EXPECT_THAT(
+      partition_result.front,
+      UnorderedElementsAreArray({line_01, line_05, line_06, line_07, line_08}));
 }
+
+// TEST(BspTests, TestBuildBspTree) {
+//  // A
+//  auto line_01 = WorldLine{QLine{QPoint{2, 8}, QPoint{8, 8}}, QPoint{0, -1}};
+//  auto line_02 = WorldLine{QLine{QPoint{8, 8}, QPoint{8, 10}}, QPoint{1, 0}};
+//  auto line_03 = WorldLine{QLine{QPoint{8, 10}, QPoint{2, 10}}, QPoint{0, 1}};
+//  auto line_04 = WorldLine{QLine{QPoint{2, 10}, QPoint{2, 8}}, QPoint{-1, 0}};
+//  // B
+//  auto line_05 = WorldLine{QLine{QPoint{2, 0}, QPoint{6, 4}}, QPoint{1, -1}};
+//  auto line_06 = WorldLine{QLine{QPoint{6, 4}, QPoint{6, 6}}, QPoint{1, 0}};
+//  auto line_07 = WorldLine{QLine{QPoint{6, 6}, QPoint{2, 2}}, QPoint{-1, 1}};
+//  auto line_08 = WorldLine{QLine{QPoint{2, 2}, QPoint{2, 0}}, QPoint{-1, 0}};
+//  // LIST OF LINES
+//  const std::vector<WorldLine> lines{line_01, line_02, line_03, line_04,
+//                                     line_05, line_06, line_07, line_08};
+
+//  BspNode bspNode = BuildBspTree(lines);
+//}
