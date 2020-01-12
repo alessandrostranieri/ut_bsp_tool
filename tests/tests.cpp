@@ -229,45 +229,45 @@ TEST(BspTests, TestBuildBspTree_TwoShapes) {
   EXPECT_THAT(node_01->front_node, NotNull());
   EXPECT_THAT(node_01->back_node, NotNull());
 
-    const BspNode& node_02 = *node_01->front_node;
-    EXPECT_EQ(node_02.split_line, std::optional<WorldLine>{line_08});
-    EXPECT_THAT(node_02.lines, IsEmpty());
-    EXPECT_THAT(node_02.front_node, IsNull());
-    EXPECT_THAT(node_02.back_node, NotNull());
+  const BspNode& node_02 = *node_01->front_node;
+  EXPECT_EQ(node_02.split_line, std::optional<WorldLine>{line_08});
+  EXPECT_THAT(node_02.lines, IsEmpty());
+  EXPECT_THAT(node_02.front_node, IsNull());
+  EXPECT_THAT(node_02.back_node, NotNull());
 
-      const BspNode& node_03 = *node_01->back_node;
-      EXPECT_THAT(node_03.split_line, Eq(std::optional<WorldLine>{line_04}));
-      EXPECT_THAT(node_03.lines, IsEmpty());
-      EXPECT_THAT(node_03.front_node, IsNull());
-      EXPECT_THAT(node_03.back_node, NotNull());
+  const BspNode& node_03 = *node_01->back_node;
+  EXPECT_THAT(node_03.split_line, Eq(std::optional<WorldLine>{line_04}));
+  EXPECT_THAT(node_03.lines, IsEmpty());
+  EXPECT_THAT(node_03.front_node, IsNull());
+  EXPECT_THAT(node_03.back_node, NotNull());
 
-    const BspNode& node_07 = *node_03.back_node;
-    EXPECT_THAT(node_07.split_line, Eq(std::optional<WorldLine>{line_02}));
-    EXPECT_THAT(node_07.lines, IsEmpty());
-    EXPECT_THAT(node_07.front_node, IsNull());
-    EXPECT_THAT(node_07.back_node, NotNull());
+  const BspNode& node_07 = *node_03.back_node;
+  EXPECT_THAT(node_07.split_line, Eq(std::optional<WorldLine>{line_02}));
+  EXPECT_THAT(node_07.lines, IsEmpty());
+  EXPECT_THAT(node_07.front_node, IsNull());
+  EXPECT_THAT(node_07.back_node, NotNull());
 
-    const BspNode& node_15 = *node_07.back_node;
-    EXPECT_THAT(node_15.split_line, Eq(std::optional<WorldLine>{}));
-    EXPECT_THAT(node_15.lines, Contains(line_03));
-    EXPECT_THAT(node_15.front_node, IsNull());
-    EXPECT_THAT(node_15.back_node, IsNull());
+  const BspNode& node_15 = *node_07.back_node;
+  EXPECT_THAT(node_15.split_line, Eq(std::optional<WorldLine>{}));
+  EXPECT_THAT(node_15.lines, Contains(line_03));
+  EXPECT_THAT(node_15.front_node, IsNull());
+  EXPECT_THAT(node_15.back_node, IsNull());
 
-    const BspNode& node_05 = *node_02.back_node;
-    EXPECT_EQ(node_05.split_line, std::optional<WorldLine>{line_05});
-    EXPECT_THAT(node_05.lines, IsEmpty());
-    EXPECT_THAT(node_05.front_node, IsNull());
-    EXPECT_THAT(node_05.back_node, NotNull());
+  const BspNode& node_05 = *node_02.back_node;
+  EXPECT_EQ(node_05.split_line, std::optional<WorldLine>{line_05});
+  EXPECT_THAT(node_05.lines, IsEmpty());
+  EXPECT_THAT(node_05.front_node, IsNull());
+  EXPECT_THAT(node_05.back_node, NotNull());
 
-    const BspNode& node_10 = *node_05.back_node;
-    EXPECT_EQ(node_10.split_line, std::optional<WorldLine>{line_07});
-    EXPECT_THAT(node_10.lines, IsEmpty());
-    EXPECT_THAT(node_10.front_node, IsNull());
-    EXPECT_THAT(node_10.back_node, NotNull());
+  const BspNode& node_10 = *node_05.back_node;
+  EXPECT_EQ(node_10.split_line, std::optional<WorldLine>{line_07});
+  EXPECT_THAT(node_10.lines, IsEmpty());
+  EXPECT_THAT(node_10.front_node, IsNull());
+  EXPECT_THAT(node_10.back_node, NotNull());
 
-    const BspNode& node_20 = *node_10.back_node;
-    EXPECT_EQ(node_20.split_line, std::optional<WorldLine>{});
-    EXPECT_THAT(node_20.lines, Contains(line_06));
-    EXPECT_THAT(node_20.front_node, IsNull());
-    EXPECT_THAT(node_20.back_node, IsNull());
+  const BspNode& node_20 = *node_10.back_node;
+  EXPECT_EQ(node_20.split_line, std::optional<WorldLine>{});
+  EXPECT_THAT(node_20.lines, Contains(line_06));
+  EXPECT_THAT(node_20.front_node, IsNull());
+  EXPECT_THAT(node_20.back_node, IsNull());
 }
