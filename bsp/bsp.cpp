@@ -39,6 +39,12 @@ LineWrtLine LineOnSide(const WorldLine& line, const WorldLine& dividing_line) {
 
 std::optional<size_t> SelectBestSplitter(const std::vector<WorldLine>& lines) {
   std::optional<size_t> best_splitter_index;
+
+  // NOTHING TO SPLIT
+  if (lines.size() < 2) {
+    return best_splitter_index;
+  }
+
   std::int32_t best_score = std::numeric_limits<std::int32_t>::max();
   for (size_t i_splitter = 0; i_splitter < lines.size(); i_splitter++) {
     const auto& splitter = lines[i_splitter];
@@ -60,7 +66,7 @@ std::optional<size_t> SelectBestSplitter(const std::vector<WorldLine>& lines) {
           back_facing += 1;
           break;
         case LineWrtLine::INTERSECT:
-          splits += 1;
+          splits++;
           break;
         default:
           break;
@@ -69,28 +75,38 @@ std::optional<size_t> SelectBestSplitter(const std::vector<WorldLine>& lines) {
     }
     auto score = abs(front_facing - back_facing) + (splits * SPLIT_IMPORTANCE);
     if (score < best_score) {
-      best_score = score;
-      best_splitter_index = i_splitter;
+        best_score = score;
+        best_splitter_index = i_splitter;
     }
   }
   return best_splitter_index;
 }
 
-BspNode BuildBspTree(std::vector<WorldLine> lines) {
+std::unique_ptr<BspNode> BuildBspTree(std::vector<WorldLine> lines) {
+  if (lines.empty()) {
+    return nullptr;
+  }
 
-  BspNode node;
+  auto node = std::make_unique<BspNode>();
   // SELECT BEST SPLIT
   auto best_split_index = SelectBestSplitter(lines);
 
   if (!best_split_index.has_value()) {
     // NO SPLIT MEANS NO LINES OR ALL LINES CAN BE PRINTED AT THE SAME TIME
-    node.lines = lines;
+    node->lines = lines;
   } else {
     // APPLY SPLIT
-    // LEFT LINES
-    // RIGHT LINES
+    const auto split_line = lines[best_split_index.value()];
+    const auto split_result = PartitionLines(lines, split_line);
 
     // RECURSE CONSTRUCTION
+    auto front_bsp_node = BuildBspTree(split_result.front);
+    auto back_bsp_node = BuildBspTree(split_result.back);
+
+    // BUILD RETURN
+    node->split_line = split_line;
+    node->front_node = move(front_bsp_node);
+    node->back_node = move(back_bsp_node);
   }
   return node;
 }
@@ -137,9 +153,11 @@ PartitionResult PartitionLines(std::vector<WorldLine> lines,
         result.back.push_back(split_result.back);
         break;
       }
-    } else {
-      result.front.push_back(last);
     }
   }
   return result;
+}
+
+bool BspNode::isLeaf() const {
+  return front_node == nullptr && back_node == nullptr;
 }

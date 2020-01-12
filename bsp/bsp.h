@@ -26,11 +26,13 @@ SplitResult SplitLine(const WorldLine& line, const WorldLine& split_line);
 struct BspNode {
   std::vector<WorldLine> lines;
   std::optional<WorldLine> split_line;
-  std::unique_ptr<BspNode> left_node;
-  std::unique_ptr<BspNode> right_node;
+  std::unique_ptr<BspNode> front_node;
+  std::unique_ptr<BspNode> back_node;
+
+  bool isLeaf() const;
 };
 
-BspNode BuildBspTree(std::vector<WorldLine> lines);
+std::unique_ptr<BspNode> BuildBspTree(std::vector<WorldLine> lines);
 
 struct PartitionResult {
   std::vector<WorldLine> front;
