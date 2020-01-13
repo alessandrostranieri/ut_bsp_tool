@@ -1,6 +1,8 @@
 #ifndef POLYGON_H
 #define POLYGON_H
 
+#include "worldline.h"
+
 #include <QJsonArray>
 #include <QLine>
 #include <QVector>
@@ -12,10 +14,10 @@ public:
 
   void read(const QJsonArray& json_array);
 
-  QVector<QLine> lines() const;
+  std::vector<WorldLine> lines() const;
 
 private:
-  QVector<QLine> lines_;
+  std::vector<WorldLine> lines_;
 };
 
 #endif // POLYGON_H

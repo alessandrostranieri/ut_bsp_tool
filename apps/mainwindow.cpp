@@ -2,6 +2,7 @@
 #include "./ui_mainwindow.h"
 #include "bsp/player.h"
 #include "bsp/polygon.h"
+#include "bsp/world.h"
 
 #include <QDebug>
 #include <QFile>
@@ -37,29 +38,20 @@ void MainWindow::render_world() {
   QByteArray saveData = in_file.readAll();
   const QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
   const QJsonObject world_json = loadDoc.object();
+  World world;
+  world.read(world_json);
+
 
   // RENDER PLAYER
-  Player player;
-  player.read(world_json["player"].toObject());
-
   ui->world_gv->scene()->addEllipse(
-      QRect{player.position() - QPoint{5, 5}, player.position() + QPoint{5, 5}},
+      QRect{world.get_player().position() - QPoint{5, 5}, world.get_player().position() + QPoint{5, 5}},
       QPen{Qt::red});
 
-  std::vector<Polygon> polygons;
-  const QJsonArray polygons_json = world_json["polygons"].toArray();
-
-  for (auto i = 0; i < polygons_json.size(); i++) {
-    const QJsonArray polygon_json = polygons_json[i].toArray();
-    Polygon polygon;
-    polygon.read(polygon_json);
-    polygons.push_back(polygon);
-  }
-
-  for (const auto& polygon : polygons) {
+  // RENDER LINES
+  for (const auto& polygon : world.get_polygons()) {
     const auto& lines = polygon.lines();
     for (auto line : lines) {
-      ui->world_gv->scene()->addLine(line, QPen{Qt::white});
+      ui->world_gv->scene()->addLine(QLine(line.p0(), line.p1()), QPen{Qt::white});
     }
   }
 }

@@ -47,7 +47,7 @@ void write_world_file() {
   world_json["polygons"] = polygons_json;
 
   // SAVE TO FILE
-  QFile out_file(QStringLiteral("../ut_bsp_tool/worlds/world_01.json"));
+  QFile out_file(QStringLiteral("../ut_bsp_tool/worlds/world_00.json"));
   if (!out_file.open(QIODevice::WriteOnly)) {
     qWarning("Couldn't open world file.");
   } else {

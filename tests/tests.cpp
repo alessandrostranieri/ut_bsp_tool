@@ -1,7 +1,11 @@
 #include <gmock/gmock.h>
 
 #include "bsp/bsp.h"
+#include "bsp/world.h"
 #include "bsp/worldline.h"
+
+#include <QFile>
+#include <QJsonDocument>
 
 using namespace testing;
 
@@ -270,4 +274,105 @@ TEST(BspTests, TestBuildBspTree_TwoShapes) {
   EXPECT_THAT(node_20.lines, Contains(line_06));
   EXPECT_THAT(node_20.front_node, IsNull());
   EXPECT_THAT(node_20.back_node, IsNull());
+}
+
+TEST(TestBsp, TestBuildBspTree_WithDemoWorld){
+    // LOAD WORLD FROM FILE
+    QFile in_file(QStringLiteral(":/worlds/world_01.json"));
+    ASSERT_TRUE(in_file.open(QIODevice::ReadOnly));
+
+    const QByteArray saveData = in_file.readAll();
+    const QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+    const QJsonObject world_json = loadDoc.object();
+    World world;
+    world.read(world_json);
+
+    // COLLECT LINES
+    std::vector<WorldLine> lines = world.all_lines();
+
+    // TEST TREE
+    auto node_01 = BuildBspTree(lines);
+
+    EXPECT_THAT(node_01, NotNull());
+    EXPECT_THAT(node_01->split_line->id(), Eq(7));
+
+    auto& node_02 = node_01->front_node;
+    EXPECT_THAT(node_02->split_line->id(), Eq(6));
+
+    auto& node_03 = node_01->back_node;
+    EXPECT_THAT(node_03->split_line->id(), Eq(10));
+
+    auto& node_04 = node_02->front_node;
+    EXPECT_THAT(node_04, IsNull());
+
+    auto& node_05 = node_02->back_node;
+    EXPECT_THAT(node_05->split_line->id(), Eq(1));
+
+    auto& node_06 = node_03->front_node;
+    EXPECT_THAT(node_06->split_line->id(), Eq(11));
+
+    auto& node_07 = node_03->back_node;
+    EXPECT_THAT(node_07->split_line->id(), Eq(8));
+
+    auto& node_10 = node_05->front_node;
+    EXPECT_THAT(node_10, IsNull());
+
+    auto& node_11 = node_05->back_node;
+    EXPECT_THAT(node_11->split_line->id(), Eq(4));
+
+    auto& node_12 = node_06->front_node;
+    EXPECT_THAT(node_12, IsNull());
+
+    auto& node_13 = node_06->back_node;
+    EXPECT_THAT(node_13->split_line->id(), Eq(16));
+
+    auto& node_14 = node_07->front_node;
+    EXPECT_THAT(node_14, IsNull());
+
+    auto& node_15 = node_07->back_node;
+    EXPECT_THAT(node_15->lines.front().id(), Eq(9));
+    EXPECT_THAT(node_15->front_node, IsNull());
+    EXPECT_THAT(node_15->back_node, IsNull());
+
+    auto& node_22 = node_11->front_node;
+    EXPECT_THAT(node_22->lines.front().id(), Eq(5));
+
+    auto& node_23 = node_11->back_node;
+    EXPECT_THAT(node_23->split_line->id(), Eq(2));
+
+    auto& node_26 = node_13->front_node;
+    EXPECT_THAT(node_26, IsNull());
+
+    auto& node_27 = node_13->back_node;
+    EXPECT_THAT(node_27->split_line->id(), Eq(13));
+
+    auto& node_46 = node_23->front_node;
+    EXPECT_THAT(node_46, IsNull());
+
+    auto& node_47 = node_23->back_node;
+    EXPECT_THAT(node_47->lines.front().id(), Eq(3));
+    EXPECT_THAT(node_47->front_node, IsNull());
+    EXPECT_THAT(node_47->back_node, IsNull());
+
+    auto& node_54 = node_27->front_node;
+    EXPECT_THAT(node_54->lines.front().id(), Eq(12));
+
+    auto& node_55 = node_27->back_node;
+    EXPECT_THAT(node_55->split_line->id(), Eq(15));
+
+    auto& node_110 = node_55->front_node;
+    EXPECT_THAT(node_110, IsNull());
+
+    auto& node_111 = node_55->back_node;
+    EXPECT_THAT(node_111->lines.front().id(), Eq(14));
+    EXPECT_THAT(node_111->front_node, IsNull());
+    EXPECT_THAT(node_111->back_node, IsNull());
+}
+
+TEST(TestBsp, TestWalkBspTree_WithDemoWorld){
+    // LOAD WORLD FROM FILE
+
+    // APPLY BSP
+
+    // TEST TREE
 }
