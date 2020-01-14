@@ -9,15 +9,15 @@
 
 class Polygon
 {
-public:
-  Polygon();
+  public:
+    Polygon();
 
-  void read(const QJsonArray& json_array);
+    void read(const QJsonArray& json_array);
 
-  std::vector<WorldLine> lines() const;
+    std::vector<WorldLine> lines() const;
 
-private:
-  std::vector<WorldLine> lines_;
+  private:
+    std::vector<WorldLine> lines_;
 };
 
 #endif // POLYGON_H

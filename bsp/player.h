@@ -8,21 +8,26 @@
 #include <QJsonObject>
 #include <QPoint>
 
-class Player {
+class Player
+{
 
-public:
-  Player() {}
+  public:
+    Player()
+    {
+    }
 
-  Player(QPoint position) : position_(position) {}
+    Player(QPoint position) : position_(position)
+    {
+    }
 
-  QPoint position() const;
+    QPoint position() const;
 
-  void read(const QJsonObject& json_object);
+    void read(const QJsonObject& json_object);
 
-  void write(QJsonObject& json_object) const;
+    void write(QJsonObject& json_object) const;
 
-private:
-  QPoint position_;
+  private:
+    QPoint position_;
 };
 
 #endif // UT_BSP_TOOL_PLAYER_H
