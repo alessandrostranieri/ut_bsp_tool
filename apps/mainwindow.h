@@ -1,7 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QGraphicsLineItem>
 #include <QMainWindow>
+#include <memory>
+
+// FORWARD DECLARATIONS
+class World;
+class BspNode;
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -24,12 +30,16 @@ class MainWindow : public QMainWindow
 
   public:
     MainWindow(QWidget* parent = nullptr);
+    void init();
 
     ~MainWindow();
 
   private:
     Ui::MainWindow* ui;
+    std::unique_ptr<World> world_;
+    std::shared_ptr<BspNode> bspTree_;
     AlgorithmView algorithmView_ = AlgorithmView::BUILD_BSP;
+    std::vector<QGraphicsLineItem*> partitionLines_;
 
   private slots:
 
@@ -45,6 +55,10 @@ class MainWindow : public QMainWindow
     void render_world();
 
     void toggleAlgorithmView();
+
+    void createPartitionLines();
+
+    void walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree, std::vector<QGraphicsLineItem*>& partitionLines);
 };
 
 #endif // MAINWINDOW_H

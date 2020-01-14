@@ -1,395 +1,391 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>MainWindow</class>
-    <widget class="QMainWindow" name="MainWindow">
-        <property name="enabled">
-            <bool>true</bool>
-        </property>
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1220</width>
+    <height>719</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>BSP Visualization Tool</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>1201</width>
+      <height>641</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QFrame" name="world_frame">
+       <property name="minimumSize">
+        <size>
+         <width>640</width>
+         <height>440</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Panel</enum>
+       </property>
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>1220</width>
-                <height>719</height>
-            </rect>
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>621</width>
+          <height>621</height>
+         </rect>
         </property>
-        <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMaximumSize</enum>
+         </property>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="styleSheet">
+            <string notr="true">font: 10pt &quot;Monospace&quot;;
+                                                    background-color: rgb(85, 85, 127);
+                                                    color: rgb(255, 255, 255);
+                                                </string>
+           </property>
+           <property name="text">
+            <string>World Map</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGraphicsView" name="world_gv">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="interactive">
+            <bool>true</bool>
+           </property>
+           <property name="sceneRect">
+            <rectf>
+             <x>-300.000000000000000</x>
+             <y>-200.000000000000000</y>
+             <width>600.000000000000000</width>
+             <height>400.000000000000000</height>
+            </rectf>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="algorithm_frame">
+       <property name="styleSheet">
+        <string notr="true">border-color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Panel</enum>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>531</width>
+          <height>621</height>
+         </rect>
         </property>
-        <property name="windowTitle">
-            <string>BSP Visualization Tool</string>
-        </property>
-        <property name="styleSheet">
-            <string notr="true"/>
-        </property>
-        <widget class="QWidget" name="centralwidget">
-            <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <widget class="QWidget" name="horizontalLayoutWidget">
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>1201</width>
-                        <height>641</height>
-                    </rect>
-                </property>
-                <layout class="QHBoxLayout" name="horizontalLayout">
-                    <item>
-                        <widget class="QFrame" name="world_frame">
-                            <property name="minimumSize">
-                                <size>
-                                    <width>640</width>
-                                    <height>440</height>
-                                </size>
-                            </property>
-                            <property name="styleSheet">
-                                <string notr="true">border-color: rgb(255, 255, 255);</string>
-                            </property>
-                            <property name="frameShape">
-                                <enum>QFrame::Panel</enum>
-                            </property>
-                            <widget class="QWidget" name="layoutWidget">
-                                <property name="geometry">
-                                    <rect>
-                                        <x>10</x>
-                                        <y>10</y>
-                                        <width>621</width>
-                                        <height>621</height>
-                                    </rect>
-                                </property>
-                                <layout class="QVBoxLayout" name="verticalLayout">
-                                    <property name="sizeConstraint">
-                                        <enum>QLayout::SetMaximumSize</enum>
-                                    </property>
-                                    <item>
-                                        <widget class="QLabel" name="label">
-                                            <property name="styleSheet">
-                                                <string notr="true">font: 10pt &quot;Monospace&quot;;
-                                                    background-color: rgb(85, 85, 127);
-                                                    color: rgb(255, 255, 255);
-                                                </string>
-                                            </property>
-                                            <property name="text">
-                                                <string>World Map</string>
-                                            </property>
-                                            <property name="alignment">
-                                                <set>Qt::AlignCenter</set>
-                                            </property>
-                                        </widget>
-                                    </item>
-                                    <item>
-                                        <widget class="QGraphicsView" name="world_gv">
-                                            <property name="enabled">
-                                                <bool>true</bool>
-                                            </property>
-                                            <property name="sizePolicy">
-                                                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                                                    <horstretch>0</horstretch>
-                                                    <verstretch>0</verstretch>
-                                                </sizepolicy>
-                                            </property>
-                                            <property name="interactive">
-                                                <bool>true</bool>
-                                            </property>
-                                            <property name="sceneRect">
-                                                <rectf>
-                                                    <x>-300.000000000000000</x>
-                                                    <y>-200.000000000000000</y>
-                                                    <width>600.000000000000000</width>
-                                                    <height>400.000000000000000</height>
-                                                </rectf>
-                                            </property>
-                                        </widget>
-                                    </item>
-                                </layout>
-                            </widget>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QFrame" name="algorithm_frame">
-                            <property name="styleSheet">
-                                <string notr="true">border-color: rgb(255, 255, 255);</string>
-                            </property>
-                            <property name="frameShape">
-                                <enum>QFrame::Panel</enum>
-                            </property>
-                            <widget class="QWidget" name="verticalLayoutWidget_2">
-                                <property name="geometry">
-                                    <rect>
-                                        <x>10</x>
-                                        <y>10</y>
-                                        <width>531</width>
-                                        <height>621</height>
-                                    </rect>
-                                </property>
-                                <layout class="QVBoxLayout" name="verticalLayout_3">
-                                    <property name="sizeConstraint">
-                                        <enum>QLayout::SetDefaultConstraint</enum>
-                                    </property>
-                                    <item>
-                                        <widget class="QLabel" name="label_2">
-                                            <property name="styleSheet">
-                                                <string notr="true">font: 10pt &quot;Monospace&quot;;
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="styleSheet">
+            <string notr="true">font: 10pt &quot;Monospace&quot;;
                                                     color: rgb(255, 255, 255);
                                                     background-color: rgb(85, 85, 127);
                                                 </string>
-                                            </property>
-                                            <property name="text">
-                                                <string>BSP View</string>
-                                            </property>
-                                            <property name="alignment">
-                                                <set>Qt::AlignCenter</set>
-                                            </property>
-                                        </widget>
-                                    </item>
-                                    <item>
-                                        <widget class="QWidget" name="widget" native="true">
-                                            <property name="minimumSize">
-                                                <size>
-                                                    <width>0</width>
-                                                    <height>100</height>
-                                                </size>
-                                            </property>
-                                            <widget class="QWidget" name="layoutWidget">
-                                                <property name="geometry">
-                                                    <rect>
-                                                        <x>10</x>
-                                                        <y>10</y>
-                                                        <width>511</width>
-                                                        <height>81</height>
-                                                    </rect>
-                                                </property>
-                                                <layout class="QHBoxLayout" name="horizontalLayout_3">
-                                                    <item>
-                                                        <widget class="QGroupBox" name="viewGroupBox">
-                                                            <property name="styleSheet">
-                                                                <string notr="true"/>
-                                                            </property>
-                                                            <property name="title">
-                                                                <string>Algorithm View</string>
-                                                            </property>
-                                                            <widget class="QWidget" name="layoutWidget">
-                                                                <property name="geometry">
-                                                                    <rect>
-                                                                        <x>10</x>
-                                                                        <y>40</y>
-                                                                        <width>231</width>
-                                                                        <height>29</height>
-                                                                    </rect>
-                                                                </property>
-                                                                <layout class="QHBoxLayout" name="horizontalLayout_4">
-                                                                    <item>
-                                                                        <widget class="QRadioButton"
-                                                                                name="buildBspButton">
-                                                                            <property name="text">
-                                                                                <string>Build</string>
-                                                                            </property>
-                                                                        </widget>
-                                                                    </item>
-                                                                    <item>
-                                                                        <widget class="QRadioButton"
-                                                                                name="walkBspButton">
-                                                                            <property name="text">
-                                                                                <string>Walk</string>
-                                                                            </property>
-                                                                        </widget>
-                                                                    </item>
-                                                                </layout>
-                                                            </widget>
-                                                        </widget>
-                                                    </item>
-                                                    <item>
-                                                        <widget class="QGroupBox" name="progrssGroupBox">
-                                                            <property name="title">
-                                                                <string>Progress</string>
-                                                            </property>
-                                                            <widget class="QWidget" name="layoutWidget">
-                                                                <property name="geometry">
-                                                                    <rect>
-                                                                        <x>10</x>
-                                                                        <y>37</y>
-                                                                        <width>231</width>
-                                                                        <height>38</height>
-                                                                    </rect>
-                                                                </property>
-                                                                <layout class="QHBoxLayout" name="horizontalLayout_5">
-                                                                    <item>
-                                                                        <widget class="QPushButton"
-                                                                                name="previousStepButton">
-                                                                            <property name="text">
-                                                                                <string>Previous</string>
-                                                                            </property>
-                                                                        </widget>
-                                                                    </item>
-                                                                    <item>
-                                                                        <widget class="QPushButton"
-                                                                                name="nextStepButton">
-                                                                            <property name="text">
-                                                                                <string>Next</string>
-                                                                            </property>
-                                                                        </widget>
-                                                                    </item>
-                                                                </layout>
-                                                            </widget>
-                                                        </widget>
-                                                    </item>
-                                                </layout>
-                                            </widget>
-                                        </widget>
-                                    </item>
-                                    <item>
-                                        <widget class="QGraphicsView" name="algorithm_gv"/>
-                                    </item>
-                                </layout>
-                            </widget>
-                        </widget>
-                    </item>
-                </layout>
-            </widget>
-            <widget class="QWidget" name="layoutWidget">
-                <property name="geometry">
-                    <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>2</width>
-                        <height>2</height>
-                    </rect>
-                </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-            </widget>
-        </widget>
-        <widget class="QMenuBar" name="menubar">
+           </property>
+           <property name="text">
+            <string>BSP View</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="controlWidget" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>100</height>
+            </size>
+           </property>
+           <widget class="QWidget" name="layoutWidget">
             <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>1220</width>
-                    <height>31</height>
-                </rect>
+             <rect>
+              <x>10</x>
+              <y>10</y>
+              <width>511</width>
+              <height>81</height>
+             </rect>
             </property>
-            <widget class="QMenu" name="menuFile">
-                <property name="title">
-                    <string>File</string>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QGroupBox" name="viewGroupBox">
+               <property name="styleSheet">
+                <string notr="true"/>
+               </property>
+               <property name="title">
+                <string>Algorithm View</string>
+               </property>
+               <widget class="QWidget" name="layoutWidget">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>40</y>
+                  <width>231</width>
+                  <height>29</height>
+                 </rect>
                 </property>
-                <addaction name="actionOpen"/>
-                <addaction name="separator"/>
-                <addaction name="actionExit"/>
-            </widget>
-            <widget class="QMenu" name="menu">
-                <property name="title">
-                    <string>?</string>
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                 <item>
+                  <widget class="QRadioButton" name="buildBspButton">
+                   <property name="text">
+                    <string>Build</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="walkBspButton">
+                   <property name="text">
+                    <string>Walk</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="progressGroupBox">
+               <property name="title">
+                <string>Progress</string>
+               </property>
+               <widget class="QWidget" name="layoutWidget">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>37</y>
+                  <width>231</width>
+                  <height>38</height>
+                 </rect>
                 </property>
-            </widget>
-            <addaction name="menuFile"/>
-            <addaction name="menu"/>
-        </widget>
-        <widget class="QStatusBar" name="statusbar"/>
-        <action name="actionOpen">
-            <property name="text">
-                <string>Open</string>
-            </property>
-        </action>
-        <action name="actionExit">
-            <property name="text">
-                <string>Exit</string>
-            </property>
-        </action>
-    </widget>
-    <resources/>
-    <connections>
-        <connection>
-            <sender>actionExit</sender>
-            <signal>triggered()</signal>
-            <receiver>MainWindow</receiver>
-            <slot>close()</slot>
-            <hints>
-                <hint type="sourcelabel">
-                    <x>-1</x>
-                    <y>-1</y>
-                </hint>
-                <hint type="destinationlabel">
-                    <x>480</x>
-                    <y>305</y>
-                </hint>
-            </hints>
-        </connection>
-        <connection>
-            <sender>previousStepButton</sender>
-            <signal>clicked()</signal>
-            <receiver>MainWindow</receiver>
-            <slot>previousStep()</slot>
-            <hints>
-                <hint type="sourcelabel">
-                    <x>1003</x>
-                    <y>146</y>
-                </hint>
-                <hint type="destinationlabel">
-                    <x>609</x>
-                    <y>359</y>
-                </hint>
-            </hints>
-        </connection>
-        <connection>
-            <sender>nextStepButton</sender>
-            <signal>clicked()</signal>
-            <receiver>MainWindow</receiver>
-            <slot>nextStep()</slot>
-            <hints>
-                <hint type="sourcelabel">
-                    <x>1121</x>
-                    <y>146</y>
-                </hint>
-                <hint type="destinationlabel">
-                    <x>609</x>
-                    <y>359</y>
-                </hint>
-            </hints>
-        </connection>
-        <connection>
-            <sender>buildBspButton</sender>
-            <signal>clicked()</signal>
-            <receiver>MainWindow</receiver>
-            <slot>toggleBuildView()</slot>
-            <hints>
-                <hint type="sourcelabel">
-                    <x>745</x>
-                    <y>145</y>
-                </hint>
-                <hint type="destinationlabel">
-                    <x>609</x>
-                    <y>359</y>
-                </hint>
-            </hints>
-        </connection>
-        <connection>
-            <sender>walkBspButton</sender>
-            <signal>clicked()</signal>
-            <receiver>MainWindow</receiver>
-            <slot>toggleWalkView()</slot>
-            <hints>
-                <hint type="sourcelabel">
-                    <x>863</x>
-                    <y>145</y>
-                </hint>
-                <hint type="destinationlabel">
-                    <x>609</x>
-                    <y>359</y>
-                </hint>
-            </hints>
-        </connection>
-    </connections>
-    <slots>
-        <slot>previousStep()</slot>
-        <slot>nextStep()</slot>
-        <slot>toggleBuildView()</slot>
-        <slot>toggleWalkView()</slot>
-    </slots>
+                <layout class="QHBoxLayout" name="horizontalLayout_5">
+                 <item>
+                  <widget class="QPushButton" name="previousStepButton">
+                   <property name="text">
+                    <string>Previous</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="nextStepButton">
+                   <property name="text">
+                    <string>Next</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGraphicsView" name="algorithm_gv"/>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>2</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1220</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>?</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>480</x>
+     <y>305</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>previousStepButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>previousStep()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1003</x>
+     <y>146</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>609</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nextStepButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>nextStep()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1121</x>
+     <y>146</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>609</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buildBspButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>toggleBuildView()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>745</x>
+     <y>145</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>609</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>walkBspButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>toggleWalkView()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>863</x>
+     <y>145</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>609</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>previousStep()</slot>
+  <slot>nextStep()</slot>
+  <slot>toggleBuildView()</slot>
+  <slot>toggleWalkView()</slot>
+ </slots>
 </ui>
