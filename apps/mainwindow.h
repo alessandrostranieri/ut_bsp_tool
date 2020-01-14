@@ -47,6 +47,8 @@ class MainWindow : public QMainWindow
 
     void previousStep();
 
+    void updateStepButton();
+
     void toggleBuildView();
 
     void toggleWalkView();
@@ -57,6 +59,10 @@ class MainWindow : public QMainWindow
     void toggleAlgorithmView();
 
     void createPartitionLines();
+
+    void extendPartitionLines();
+
+    void addPartitionLinesToScene();
 
     void walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree, std::vector<QGraphicsLineItem*>& partitionLines);
 };

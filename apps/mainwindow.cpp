@@ -49,14 +49,37 @@ void MainWindow::nextStep()
     auto found = std::find_if_not(partitionLines_.begin(), partitionLines_.end(), [](const auto& gl){return gl->isVisible();});
     if(found != partitionLines_.end()){
         (*found)->setVisible(true);
-    } else {
-        ui->nextStepButton->setEnabled(false);
     }
+    updateStepButton();
 }
 
 void MainWindow::previousStep()
 {
     qDebug("Previous Step");
+    auto found = std::find_if(partitionLines_.rbegin(), partitionLines_.rend(), [](const auto& gl){return gl->isVisible();});
+    if(found != partitionLines_.rend()){
+        (*found)->setVisible(false);
+    }
+    updateStepButton();
+}
+
+void MainWindow::updateStepButton()
+{
+    const auto count_visible = static_cast<size_t>(std::count_if(partitionLines_.begin(),
+                                                                 partitionLines_.end(),
+                                                                 [](const auto& gl){ return gl->isVisible();}));
+    qDebug() << count_visible;
+    const auto num_lines = partitionLines_.size();
+    if (count_visible == 0) {
+        ui->nextStepButton->setEnabled(true);
+        ui->previousStepButton->setEnabled(false);
+    } else if(count_visible == num_lines){
+        ui->nextStepButton->setEnabled(false);
+        ui->previousStepButton->setEnabled(true);
+    } else {
+        ui->nextStepButton->setEnabled(true);
+        ui->previousStepButton->setEnabled(true);
+    }
 }
 
 void MainWindow::toggleBuildView()
@@ -119,12 +142,49 @@ void MainWindow::createPartitionLines()
     walkBspPartitionLines(bspTree_, partitionLines_);
     qDebug() << "Partition lines creation ended";
 
+    extendPartitionLines();
+
     qDebug() << "Adding partition lines to scene ";
+    addPartitionLinesToScene();
+    qDebug() << "Partition lines added to scene";
+}
+
+void MainWindow::extendPartitionLines()
+{
+    auto xMin = ui->world_gv->sceneRect().x();
+    auto yMin = ui->world_gv->sceneRect().y();
+    auto xMax = xMin + ui->world_gv->sceneRect().width();
+    auto yMax = yMin + ui->world_gv->sceneRect().height();
+    QLineF top{{xMin,yMin}, {xMax,yMin}};
+    QLineF bottom{{xMin,yMax}, {xMax,yMax}};
+    QLineF left{{xMin, yMax}, {xMin, yMin}};
+    QLineF right{{xMax, yMax}, {xMax, yMin}};
+
+    for(auto partition_line: partitionLines_){
+        QLineF line = partition_line->line();
+        qreal angle = line.angle();
+        if(angle == 90.0 || angle == 270.0){
+            QPointF topIntersection;
+            line.intersect(top, &topIntersection);
+            QPointF bottomIntersection;
+            line.intersect(bottom, &bottomIntersection);
+            partition_line->setLine({topIntersection, bottomIntersection});
+        } else {
+            QPointF leftIntersection;
+            line.intersect(left, &leftIntersection);
+            QPointF rightIntersection;
+            line.intersect(right, &rightIntersection);
+            partition_line->setLine({leftIntersection, rightIntersection});
+        }
+    }
+}
+
+void MainWindow::addPartitionLinesToScene()
+{
     for(auto partition_line: partitionLines_){
         ui->world_gv->scene()->addItem(partition_line);
         partition_line->setVisible(false);
     }
-    qDebug() << "Partition lines added to scene";
 }
 
 void MainWindow::walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree,
