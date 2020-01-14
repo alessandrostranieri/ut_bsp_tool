@@ -371,8 +371,36 @@ TEST(TestBsp, TestBuildBspTree_WithDemoWorld){
 
 TEST(TestBsp, TestWalkBspTree_WithDemoWorld){
     // LOAD WORLD FROM FILE
+    QFile in_file(QStringLiteral(":/worlds/world_01.json"));
+    ASSERT_TRUE(in_file.open(QIODevice::ReadOnly));
 
-    // APPLY BSP
+    const QByteArray saveData = in_file.readAll();
+    const QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+    const QJsonObject world_json = loadDoc.object();
+    World world;
+    world.read(world_json);
 
-    // TEST TREE
+    // COLLECT LINES
+    std::vector<WorldLine> lines = world.all_lines();
+    const auto node_01 = BuildBspTree(lines);
+    const auto player = world.get_player();
+
+    std::vector<WorldLine> ordered_lines;
+    WalkBspTree(player, node_01, ordered_lines);
+
+    // NODES 1 AND 13 ARE COLINEAR AND ARE NOT RENDERED
+    EXPECT_EQ(ordered_lines[0].id(), 8);
+    EXPECT_EQ(ordered_lines[1].id(), 9);
+    EXPECT_EQ(ordered_lines[2].id(), 10);
+    EXPECT_EQ(ordered_lines[3].id(), 11);
+    EXPECT_EQ(ordered_lines[4].id(), 12);
+    EXPECT_EQ(ordered_lines[5].id(), 15);
+    EXPECT_EQ(ordered_lines[6].id(), 14);
+    EXPECT_EQ(ordered_lines[7].id(), 16);
+    EXPECT_EQ(ordered_lines[8].id(), 7);
+    EXPECT_EQ(ordered_lines[9].id(), 2);
+    EXPECT_EQ(ordered_lines[10].id(), 3);
+    EXPECT_EQ(ordered_lines[11].id(), 4);
+    EXPECT_EQ(ordered_lines[12].id(), 5);
+    EXPECT_EQ(ordered_lines[13].id(), 6);
 }

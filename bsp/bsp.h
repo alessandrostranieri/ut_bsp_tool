@@ -2,6 +2,7 @@
 #define BSP_H
 
 #include "worldline.h"
+#include "player.h"
 
 #include <memory>
 #include <optional>
@@ -26,13 +27,11 @@ SplitResult SplitLine(const WorldLine& line, const WorldLine& split_line);
 struct BspNode {
   std::vector<WorldLine> lines;
   std::optional<WorldLine> split_line;
-  std::unique_ptr<BspNode> front_node;
-  std::unique_ptr<BspNode> back_node;
-
-  bool isLeaf() const;
+  std::shared_ptr<BspNode> front_node;
+  std::shared_ptr<BspNode> back_node;
 };
 
-std::unique_ptr<BspNode> BuildBspTree(std::vector<WorldLine> lines);
+std::shared_ptr<BspNode> BuildBspTree(std::vector<WorldLine> lines);
 
 struct PartitionResult {
   std::vector<WorldLine> front;
@@ -41,5 +40,7 @@ struct PartitionResult {
 
 PartitionResult PartitionLines(std::vector<WorldLine> lines,
                                const WorldLine& split_line);
+
+void WalkBspTree(const Player& player, std::shared_ptr<BspNode> bsp_tree, std::vector<WorldLine>& ordered_lines);
 
 #endif // BSP_H

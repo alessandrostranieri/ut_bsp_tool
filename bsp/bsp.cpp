@@ -82,7 +82,7 @@ std::optional<size_t> SelectBestSplitter(const std::vector<WorldLine>& lines) {
   return best_splitter_index;
 }
 
-std::unique_ptr<BspNode> BuildBspTree(std::vector<WorldLine> lines) {
+std::shared_ptr<BspNode> BuildBspTree(std::vector<WorldLine> lines) {
   if (lines.empty()) {
     return nullptr;
   }
@@ -158,6 +158,28 @@ PartitionResult PartitionLines(std::vector<WorldLine> lines,
   return result;
 }
 
-bool BspNode::isLeaf() const {
-  return front_node == nullptr && back_node == nullptr;
+void WalkBspTree(const Player &player, std::shared_ptr<BspNode> bsp_tree, std::vector<WorldLine> &ordered_lines) {
+    if(bsp_tree == nullptr) {
+        return;
+    }
+    // LEAF
+    if(!bsp_tree->split_line.has_value() && !bsp_tree->lines.empty()){
+        const auto& node_lines = bsp_tree->lines;
+        ordered_lines.insert(ordered_lines.end(), node_lines.begin(), node_lines.end());
+    } else {
+        const auto& line = bsp_tree->split_line.value();
+        const auto side = PointOnSide(player.position(), line);
+        if(side == PointWrtLine::FRONT){
+            WalkBspTree(player, bsp_tree->back_node, ordered_lines);
+            ordered_lines.push_back(line);
+            WalkBspTree(player, bsp_tree->front_node, ordered_lines);
+        } else if (side == PointWrtLine::BACK){
+            WalkBspTree(player, bsp_tree->front_node, ordered_lines);
+            ordered_lines.push_back(line);
+            WalkBspTree(player, bsp_tree->back_node, ordered_lines);
+        } else if (side == PointWrtLine::COLINEAR) {
+            WalkBspTree(player, bsp_tree->front_node, ordered_lines);
+            WalkBspTree(player, bsp_tree->back_node, ordered_lines);
+        }
+    }
 }
