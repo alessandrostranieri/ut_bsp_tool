@@ -23,9 +23,20 @@ MainWindow::MainWindow(QWidget* parent)
   render_world();
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
+MainWindow::~MainWindow() { delete ui; }
+
+void MainWindow::nextStep() { qDebug("Next Step"); }
+
+void MainWindow::previousStep() { qDebug("Previous Step"); }
+
+void MainWindow::toggleBuildView() {
+  algorithmView_ = AlgorithmView::BUILD_BSP;
+  qDebug() << to_string(algorithmView_);
+}
+
+void MainWindow::toggleWalkView() {
+  algorithmView_ = AlgorithmView::WALK_BSP;
+  qDebug() << to_string(algorithmView_);
 }
 
 void MainWindow::render_world() {
@@ -35,23 +46,43 @@ void MainWindow::render_world() {
     qWarning("Couldn't open world file.");
   }
 
-  QByteArray saveData = in_file.readAll();
-  const QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+  QByteArray worldData = in_file.readAll();
+  const QJsonDocument loadDoc(QJsonDocument::fromJson(worldData));
   const QJsonObject world_json = loadDoc.object();
   World world;
   world.read(world_json);
 
-
   // RENDER PLAYER
   ui->world_gv->scene()->addEllipse(
-      QRect{world.get_player().position() - QPoint{5, 5}, world.get_player().position() + QPoint{5, 5}},
+      QRect{world.get_player().position() - QPoint{5, 5},
+            world.get_player().position() + QPoint{5, 5}},
       QPen{Qt::red});
 
   // RENDER LINES
   for (const auto& polygon : world.get_polygons()) {
     const auto& lines = polygon.lines();
     for (auto line : lines) {
-      ui->world_gv->scene()->addLine(QLine(line.p0(), line.p1()), QPen{Qt::white});
+      ui->world_gv->scene()->addLine(QLine(line.p0(), line.p1()),
+                                     QPen{Qt::white});
     }
+  }
+}
+
+void MainWindow::toggleAlgorithmView() {
+  if (algorithmView_ == AlgorithmView::BUILD_BSP) {
+    algorithmView_ = AlgorithmView::WALK_BSP;
+  } else {
+    algorithmView_ = AlgorithmView::BUILD_BSP;
+  }
+}
+
+QString to_string(const AlgorithmView& algorithmView) {
+  switch (algorithmView) {
+  case (AlgorithmView::BUILD_BSP):
+    return QString("Build BSP");
+  case (AlgorithmView::WALK_BSP):
+    return QString("Walk BSP");
+  default:
+    abort();
   }
 }

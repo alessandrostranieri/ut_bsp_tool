@@ -56,7 +56,7 @@
        <property name="frameShape">
         <enum>QFrame::Panel</enum>
        </property>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -130,6 +130,9 @@ color: rgb(255, 255, 255);</string>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
          <item>
           <widget class="QLabel" name="label_2">
            <property name="styleSheet">
@@ -143,6 +146,97 @@ background-color: rgb(85, 85, 127);</string>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="widget" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>100</height>
+            </size>
+           </property>
+           <widget class="QWidget" name="layoutWidget">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>10</y>
+              <width>511</width>
+              <height>81</height>
+             </rect>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QGroupBox" name="viewGroupBox">
+               <property name="styleSheet">
+                <string notr="true"/>
+               </property>
+               <property name="title">
+                <string>Algorithm View</string>
+               </property>
+               <widget class="QWidget" name="layoutWidget">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>40</y>
+                  <width>231</width>
+                  <height>29</height>
+                 </rect>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                 <item>
+                  <widget class="QRadioButton" name="buildBspButton">
+                   <property name="text">
+                    <string>Build</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="walkBspButton">
+                   <property name="text">
+                    <string>Walk</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="progrssGroupBox">
+               <property name="title">
+                <string>Progress</string>
+               </property>
+               <widget class="QWidget" name="layoutWidget">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>37</y>
+                  <width>231</width>
+                  <height>38</height>
+                 </rect>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_5">
+                 <item>
+                  <widget class="QPushButton" name="previousStepButton">
+                   <property name="text">
+                    <string>Previous</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="nextStepButton">
+                   <property name="text">
+                    <string>Next</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
          <item>
@@ -221,5 +315,75 @@ background-color: rgb(85, 85, 127);</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>previousStepButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>previousStep()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1003</x>
+     <y>146</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>609</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nextStepButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>nextStep()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1121</x>
+     <y>146</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>609</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buildBspButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>toggleBuildView()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>745</x>
+     <y>145</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>609</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>walkBspButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>toggleWalkView()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>863</x>
+     <y>145</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>609</x>
+     <y>359</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>previousStep()</slot>
+  <slot>nextStep()</slot>
+  <slot>toggleBuildView()</slot>
+  <slot>toggleWalkView()</slot>
+ </slots>
 </ui>
