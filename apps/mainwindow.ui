@@ -86,71 +86,6 @@
           </widget>
          </item>
          <item>
-          <widget class="QGraphicsView" name="world_gv">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="interactive">
-            <bool>true</bool>
-           </property>
-           <property name="sceneRect">
-            <rectf>
-             <x>-300.000000000000000</x>
-             <y>-200.000000000000000</y>
-             <width>600.000000000000000</width>
-             <height>400.000000000000000</height>
-            </rectf>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </item>
-     <item>
-      <widget class="QFrame" name="algorithm_frame">
-       <property name="styleSheet">
-        <string notr="true">border-color: rgb(255, 255, 255);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Panel</enum>
-       </property>
-       <widget class="QWidget" name="verticalLayoutWidget_2">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>531</width>
-          <height>621</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetDefaultConstraint</enum>
-         </property>
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="styleSheet">
-            <string notr="true">font: 10pt &quot;Monospace&quot;;
-                                                    color: rgb(255, 255, 255);
-                                                    background-color: rgb(85, 85, 127);
-                                                </string>
-           </property>
-           <property name="text">
-            <string>BSP View</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QWidget" name="controlWidget" native="true">
            <property name="minimumSize">
             <size>
@@ -161,7 +96,7 @@
            <widget class="QWidget" name="layoutWidget">
             <property name="geometry">
              <rect>
-              <x>10</x>
+              <x>60</x>
               <y>10</y>
               <width>511</width>
               <height>81</height>
@@ -239,6 +174,71 @@
              </item>
             </layout>
            </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGraphicsView" name="world_gv">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="interactive">
+            <bool>true</bool>
+           </property>
+           <property name="sceneRect">
+            <rectf>
+             <x>-300.000000000000000</x>
+             <y>-200.000000000000000</y>
+             <width>600.000000000000000</width>
+             <height>400.000000000000000</height>
+            </rectf>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="algorithm_frame">
+       <property name="styleSheet">
+        <string notr="true">border-color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Panel</enum>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>531</width>
+          <height>621</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="styleSheet">
+            <string notr="true">font: 10pt &quot;Monospace&quot;;
+                                                    color: rgb(255, 255, 255);
+                                                    background-color: rgb(85, 85, 127);
+                                                </string>
+           </property>
+           <property name="text">
+            <string>BSP View</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
           </widget>
          </item>
          <item>
