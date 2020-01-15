@@ -40,6 +40,7 @@ class MainWindow : public QMainWindow
     std::shared_ptr<BspNode> bspTree_;
     AlgorithmView algorithmView_ = AlgorithmView::BUILD_BSP;
     std::vector<QGraphicsLineItem*> partitionLines_;
+    std::vector<QGraphicsLineItem*> renderLines_;
 
   private slots:
 
@@ -56,8 +57,6 @@ class MainWindow : public QMainWindow
   private:
     void render_world();
 
-    void toggleAlgorithmView();
-
     void createPartitionLines();
 
     void extendPartitionLines();
@@ -65,6 +64,10 @@ class MainWindow : public QMainWindow
     void addPartitionLinesToScene();
 
     void walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree, std::vector<QGraphicsLineItem*>& partitionLines);
+
+    void createRenderLines();
+
+    void clearWorldView();
 };
 
 #endif // MAINWINDOW_H

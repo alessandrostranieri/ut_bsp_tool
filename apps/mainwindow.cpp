@@ -34,8 +34,12 @@ void MainWindow::init()
 
     createPartitionLines();
 
+    createRenderLines();
+
     ui->nextStepButton->setEnabled(true);
     ui->previousStepButton->setEnabled(false);
+
+    ui->buildBspButton->click();
 }
 
 MainWindow::~MainWindow()
@@ -46,8 +50,9 @@ MainWindow::~MainWindow()
 void MainWindow::nextStep()
 {
     qDebug("Next Step");
-    auto found = std::find_if_not(partitionLines_.begin(), partitionLines_.end(), [](const auto& gl){return gl->isVisible();});
-    if(found != partitionLines_.end()){
+    const std::vector<QGraphicsLineItem*>& lines = algorithmView_ == AlgorithmView::BUILD_BSP ? partitionLines_ : renderLines_;
+    auto found = std::find_if_not(lines.begin(), lines.end(), [](const auto& gl){return gl->isVisible();});
+    if(found != lines.end()){
         (*found)->setVisible(true);
     }
     updateStepButton();
@@ -56,8 +61,9 @@ void MainWindow::nextStep()
 void MainWindow::previousStep()
 {
     qDebug("Previous Step");
-    auto found = std::find_if(partitionLines_.rbegin(), partitionLines_.rend(), [](const auto& gl){return gl->isVisible();});
-    if(found != partitionLines_.rend()){
+    const std::vector<QGraphicsLineItem*>& lines = algorithmView_ == AlgorithmView::BUILD_BSP ? partitionLines_ : renderLines_;
+    auto found = std::find_if(lines.rbegin(), lines.rend(), [](const auto& gl){return gl->isVisible();});
+    if(found != lines.rend()){
         (*found)->setVisible(false);
     }
     updateStepButton();
@@ -65,11 +71,11 @@ void MainWindow::previousStep()
 
 void MainWindow::updateStepButton()
 {
-    const auto count_visible = static_cast<size_t>(std::count_if(partitionLines_.begin(),
-                                                                 partitionLines_.end(),
+    const std::vector<QGraphicsLineItem*>& lines = algorithmView_ == AlgorithmView::BUILD_BSP ? partitionLines_ : renderLines_;
+    const auto count_visible = static_cast<size_t>(std::count_if(lines.begin(),
+                                                                 lines.end(),
                                                                  [](const auto& gl){ return gl->isVisible();}));
-    qDebug() << count_visible;
-    const auto num_lines = partitionLines_.size();
+    const auto num_lines = lines.size();
     if (count_visible == 0) {
         ui->nextStepButton->setEnabled(true);
         ui->previousStepButton->setEnabled(false);
@@ -86,12 +92,16 @@ void MainWindow::toggleBuildView()
 {
     algorithmView_ = AlgorithmView::BUILD_BSP;
     qDebug() << to_string(algorithmView_);
+    clearWorldView();
+    updateStepButton();
 }
 
 void MainWindow::toggleWalkView()
 {
     algorithmView_ = AlgorithmView::WALK_BSP;
     qDebug() << to_string(algorithmView_);
+    clearWorldView();
+    updateStepButton();
 }
 
 void MainWindow::render_world()
@@ -121,18 +131,6 @@ void MainWindow::render_world()
         {
             ui->world_gv->scene()->addLine(QLine(line.p0(), line.p1()), QPen{Qt::white});
         }
-    }
-}
-
-void MainWindow::toggleAlgorithmView()
-{
-    if (algorithmView_ == AlgorithmView::BUILD_BSP)
-    {
-        algorithmView_ = AlgorithmView::WALK_BSP;
-    }
-    else
-    {
-        algorithmView_ = AlgorithmView::BUILD_BSP;
     }
 }
 
@@ -212,6 +210,34 @@ void MainWindow::walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree,
         partitionLines.push_back(partitionLine);
         walkBspPartitionLines(bsp_tree->front_node, partitionLines);
         walkBspPartitionLines(bsp_tree->back_node, partitionLines);
+    }
+}
+
+void MainWindow::createRenderLines()
+{
+    std::vector<WorldLine> ordered_lines;
+    WalkBspTree(world_->get_player(), bspTree_, ordered_lines);
+
+    for(const auto& line: ordered_lines){
+        auto* renderLine = new QGraphicsLineItem({line.p0(), line.p1()});
+        renderLine->setPen(QPen(QColor::fromRgb(234, 124, 14)));
+        renderLines_.push_back(renderLine);
+    }
+    qDebug() << "Number of render lines: " << renderLines_.size();
+
+    for(const auto renderLine: renderLines_){
+        ui->world_gv->scene()->addItem(renderLine);
+        renderLine->setVisible(false);
+    }
+}
+
+void MainWindow::clearWorldView()
+{
+    for(auto& partitionLine: partitionLines_){
+        partitionLine->setVisible(false);
+    }
+    for(auto& renderLine: renderLines_){
+        renderLine->setVisible(false);
     }
 }
 
