@@ -6,6 +6,7 @@
 #include "bsp/bsp.h"
 #include "treenode.h"
 #include "crosshairgraphicsitem.h"
+#include "partitionline.h"
 
 #include <QDebug>
 #include <QFile>
@@ -14,6 +15,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QRect>
+#include <QVector2D>
 
 #include <algorithm>
 
@@ -54,35 +56,67 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::nextStep()
-{
-    qDebug("Next Step");
-    const std::vector<QGraphicsLineItem*>& lines = algorithmView_ == AlgorithmView::BUILD_BSP ? partitionLines_ : renderLines_;
+template <typename G>
+void toggleNextVisible(std::vector<G*>& lines){
     auto found = std::find_if_not(lines.begin(), lines.end(), [](const auto& gl){return gl->isVisible();});
     if(found != lines.end()){
         (*found)->setVisible(true);
     }
+}
+
+void MainWindow::nextStep()
+{
+    qDebug("Next Step");
+    switch(algorithmView_){
+    case AlgorithmView::BUILD_BSP:
+        toggleNextVisible(partitionLines_);
+        break;
+    case AlgorithmView::WALK_BSP:
+        toggleNextVisible(renderLines_);
+    }
     updateStepButton();
+}
+
+template <typename G>
+void togglePreviousVisible(std::vector<G*>& lines){
+    auto found = std::find_if(lines.rbegin(), lines.rend(), [](const auto& gl){return gl->isVisible();});
+    if(found != lines.rend()){
+        (*found)->setVisible(false);
+    }
 }
 
 void MainWindow::previousStep()
 {
     qDebug("Previous Step");
-    const std::vector<QGraphicsLineItem*>& lines = algorithmView_ == AlgorithmView::BUILD_BSP ? partitionLines_ : renderLines_;
-    auto found = std::find_if(lines.rbegin(), lines.rend(), [](const auto& gl){return gl->isVisible();});
-    if(found != lines.rend()){
-        (*found)->setVisible(false);
+    switch(algorithmView_){
+    case AlgorithmView::BUILD_BSP:
+        togglePreviousVisible(partitionLines_);
+        break;
+    case AlgorithmView::WALK_BSP:
+        togglePreviousVisible(renderLines_);
     }
     updateStepButton();
 }
 
+std::tuple<size_t, size_t> MainWindow::countVisible(){
+    if (algorithmView_ == AlgorithmView::BUILD_BSP){
+        const auto count_visible = static_cast<size_t>(std::count_if(partitionLines_.begin(),
+                                                                     partitionLines_.end(),
+                                                                     [](const auto& gl){ return gl->isVisible();}));
+        const auto num_lines = partitionLines_.size();
+        return std::make_tuple(count_visible, num_lines);
+    } else {
+        const auto count_visible = static_cast<size_t>(std::count_if(renderLines_.begin(),
+                                                                     renderLines_.end(),
+                                                                     [](const auto& gl){ return gl->isVisible();}));
+        const auto num_lines = renderLines_.size();
+        return std::make_tuple(count_visible, num_lines);
+    }
+}
+
 void MainWindow::updateStepButton()
 {
-    const std::vector<QGraphicsLineItem*>& lines = algorithmView_ == AlgorithmView::BUILD_BSP ? partitionLines_ : renderLines_;
-    const auto count_visible = static_cast<size_t>(std::count_if(lines.begin(),
-                                                                 lines.end(),
-                                                                 [](const auto& gl){ return gl->isVisible();}));
-    const auto num_lines = lines.size();
+    auto [count_visible, num_lines] = countVisible();
     if (count_visible == 0) {
         ui->nextStepButton->setEnabled(true);
         ui->previousStepButton->setEnabled(false);
@@ -156,19 +190,6 @@ void MainWindow::initAlgorithmView()
 
 void MainWindow::createPartitionLines()
 {
-    qDebug() << "Partition lines creation started";
-    walkBspPartitionLines(bspTree_, partitionLines_);
-    qDebug() << "Partition lines creation ended";
-
-    extendPartitionLines();
-
-    qDebug() << "Adding partition lines to scene ";
-    addPartitionLinesToScene();
-    qDebug() << "Partition lines added to scene";
-}
-
-void MainWindow::extendPartitionLines()
-{
     auto xMin = ui->world_gv->sceneRect().x();
     auto yMin = ui->world_gv->sceneRect().y();
     auto xMax = xMin + ui->world_gv->sceneRect().width();
@@ -178,21 +199,87 @@ void MainWindow::extendPartitionLines()
     QLineF left{{xMin, yMax}, {xMin, yMin}};
     QLineF right{{xMax, yMax}, {xMax, yMin}};
 
-    for(auto partition_line: partitionLines_){
-        QLineF line = partition_line->line();
-        qreal angle = line.angle();
-        if(angle == 90.0 || angle == 270.0){
-            QPointF topIntersection;
-            line.intersect(top, &topIntersection);
-            QPointF bottomIntersection;
-            line.intersect(bottom, &bottomIntersection);
-            partition_line->setLine({topIntersection, bottomIntersection});
-        } else {
-            QPointF leftIntersection;
-            line.intersect(left, &leftIntersection);
-            QPointF rightIntersection;
-            line.intersect(right, &rightIntersection);
-            partition_line->setLine({leftIntersection, rightIntersection});
+    PartitionLine* topPartition = new PartitionLine(top, nullptr);
+    PartitionLine* bottomPartition = new PartitionLine(bottom, topPartition);
+    PartitionLine* leftPartition = new PartitionLine(left, bottomPartition);
+    PartitionLine* rightPartition = new PartitionLine(right, leftPartition);
+
+    qDebug() << "Partition lines creation started";
+    walkBspPartitionLines(bspTree_, partitionLines_, rightPartition);
+    qDebug() << "Partition lines creation ended";
+
+    extendPartitionLines();
+
+    clipPartitionLines();
+
+    qDebug() << "Adding partition lines to scene ";
+    addPartitionLinesToScene();
+    qDebug() << "Partition lines added to scene";
+}
+
+void MainWindow::extendPartitionLines()
+{
+//    auto xMin = ui->world_gv->sceneRect().x();
+//    auto yMin = ui->world_gv->sceneRect().y();
+//    auto xMax = xMin + ui->world_gv->sceneRect().width();
+//    auto yMax = yMin + ui->world_gv->sceneRect().height();
+//    QLineF top{{xMin,yMin}, {xMax,yMin}};
+//    QLineF bottom{{xMin,yMax}, {xMax,yMax}};
+//    QLineF left{{xMin, yMax}, {xMin, yMin}};
+//    QLineF right{{xMax, yMax}, {xMax, yMin}};
+
+//    for(auto partition_line: partitionLines_){
+//        QLineF line = partition_line->line();
+//        qreal angle = line.angle();
+//        if(angle == 90.0 || angle == 270.0){
+//            QPointF topIntersection;
+//            line.intersect(top, &topIntersection);
+//            QPointF bottomIntersection;
+//            line.intersect(bottom, &bottomIntersection);
+//            partition_line->setLine({topIntersection, bottomIntersection});
+//        } else {
+//            QPointF leftIntersection;
+//            line.intersect(left, &leftIntersection);
+//            QPointF rightIntersection;
+//            line.intersect(right, &rightIntersection);
+//            partition_line->setLine({leftIntersection, rightIntersection});
+//        }
+//    }
+
+//    PartitionLine* topPartition = new PartitionLine(top, nullptr);
+//    PartitionLine* bottomPartition = new PartitionLine(bottom, topPartition);
+//    PartitionLine* leftPartition = new PartitionLine(left, bottomPartition);
+//    PartitionLine* rightPartition = new PartitionLine(right, leftPartition);
+}
+
+void MainWindow::clipPartitionLines()
+{
+    for(auto& partitionLine : partitionLines_){
+        QVector2D p1Vec{partitionLine->line().p1()};
+        QVector2D p2Vec{partitionLine->line().p2()};
+        PartitionLine* parentLine = partitionLine->getParentLine();
+        float distGlobalP1 = 1000.0;
+        float distGlobalP2 = 1000.0;
+        while(parentLine != nullptr){
+            // CALCULATE INTERSECTION
+            QPointF intersectionPoint;
+            auto intersection = partitionLine->line().intersect(parentLine->line(), &intersectionPoint);
+            if(intersection != QLineF::IntersectType::NoIntersection){
+                auto distP1 = p1Vec.distanceToPoint(QVector2D{intersectionPoint});
+                auto distP2 = p2Vec.distanceToPoint(QVector2D{intersectionPoint});
+                if (distP1 < distP2 && distP1 < distGlobalP1){
+                    distGlobalP1 = distP1;
+                    QLineF newLine{intersectionPoint, partitionLine->line().p2()};
+                    partitionLine->setLine(newLine);
+                } else if (distP2 < distP1 && distP2 < distGlobalP2) {
+                    distGlobalP2 = distP2;
+                    QLineF newLine{partitionLine->line().p1(), intersectionPoint};
+                    partitionLine->setLine(newLine);
+                }
+            }
+
+            // NEXT
+            parentLine = parentLine->getParentLine();
         }
     }
 }
@@ -206,7 +293,8 @@ void MainWindow::addPartitionLinesToScene()
 }
 
 void MainWindow::walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree,
-                                       std::vector<QGraphicsLineItem *>& partitionLines)
+                                       std::vector<PartitionLine *>& partitionLines,
+                                       PartitionLine* parentLine)
 {
     if (bsp_tree == nullptr)
     {
@@ -218,7 +306,7 @@ void MainWindow::walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree,
     if (!bsp_tree->split_line.has_value() && !bsp_tree->lines.empty())
     {
         const auto& line = bsp_tree->lines[0];
-        QGraphicsLineItem* partitionLine = new QGraphicsLineItem(QLine(line.p0(), line.p1()));
+        PartitionLine* partitionLine = new PartitionLine(QLine(line.p0(), line.p1()), parentLine);
         partitionLine->setPen(pen);
         partitionLines.push_back(partitionLine);
     }
@@ -227,11 +315,11 @@ void MainWindow::walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree,
     {
         const auto& split_line = bsp_tree->split_line.value();
         const auto line = QLine(split_line.p0(), split_line.p1());
-        QGraphicsLineItem* partitionLine = new QGraphicsLineItem(line);
+        PartitionLine* partitionLine = new PartitionLine(line, parentLine);
         partitionLine->setPen(pen);
         partitionLines.push_back(partitionLine);
-        walkBspPartitionLines(bsp_tree->front_node, partitionLines);
-        walkBspPartitionLines(bsp_tree->back_node, partitionLines);
+        walkBspPartitionLines(bsp_tree->front_node, partitionLines, partitionLine);
+        walkBspPartitionLines(bsp_tree->back_node, partitionLines, partitionLine);
     }
 }
 

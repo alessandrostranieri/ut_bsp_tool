@@ -4,6 +4,8 @@ add_executable(bsp_tool
         treenode.h
         crosshairgraphicsitem.cpp
         crosshairgraphicsitem.h
+        partitionline.cpp
+        partitionline.h
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui

@@ -8,6 +8,7 @@
 // FORWARD DECLARATIONS
 class World;
 class BspNode;
+class PartitionLine;
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -39,7 +40,7 @@ class MainWindow : public QMainWindow
     std::unique_ptr<World> world_;
     std::shared_ptr<BspNode> bspTree_;
     AlgorithmView algorithmView_ = AlgorithmView::BUILD_BSP;
-    std::vector<QGraphicsLineItem*> partitionLines_;
+    std::vector<PartitionLine*> partitionLines_;
     std::vector<QGraphicsLineItem*> renderLines_;
     QGraphicsEllipseItem* playerMarker_;
 
@@ -64,13 +65,17 @@ class MainWindow : public QMainWindow
 
     void extendPartitionLines();
 
+    void clipPartitionLines();
+
     void addPartitionLinesToScene();
 
-    void walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree, std::vector<QGraphicsLineItem*>& partitionLines);
+    void walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree, std::vector<PartitionLine*>& partitionLines, PartitionLine* parentLine = nullptr);
 
     void createRenderLines();
 
     void clearWorldView();
+
+    std::tuple<size_t, size_t> countVisible();
 };
 
 #endif // MAINWINDOW_H
