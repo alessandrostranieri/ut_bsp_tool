@@ -1,26 +1,26 @@
 #ifndef TREENODE_H
 #define TREENODE_H
 
+// FORWARD DECLARATIONS
+class QGraphicsLineItem;
+class QGraphicsSimpleTextItem;
+
 #include <QGraphicsItem>
-#include <QGraphicsEllipseItem>
-#include <QGraphicsTextItem>
 
 class TreeNode : public QGraphicsItem
 {
 public:
-    static TreeNode* make_node(std::uint32_t id, QPointF position);
+    TreeNode(std::uint32_t id, QPointF position);
 public:
     QRectF boundingRect() const override;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget) override;
 private:
-    TreeNode(std::uint32_t id, QPointF position);
-    void init();
-private:
     std::uint32_t id_;
     QPointF position_;
     QGraphicsEllipseItem* circle_;
+    QGraphicsSimpleTextItem* idText_;
 };
 
 #endif // TREENODE_H
