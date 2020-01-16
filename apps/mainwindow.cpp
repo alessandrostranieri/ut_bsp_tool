@@ -92,6 +92,7 @@ void MainWindow::toggleBuildView()
 {
     algorithmView_ = AlgorithmView::BUILD_BSP;
     qDebug() << to_string(algorithmView_);
+    playerMarker_->setVisible(false);
     clearWorldView();
     updateStepButton();
 }
@@ -100,6 +101,7 @@ void MainWindow::toggleWalkView()
 {
     algorithmView_ = AlgorithmView::WALK_BSP;
     qDebug() << to_string(algorithmView_);
+    playerMarker_->setVisible(true);
     clearWorldView();
     updateStepButton();
 }
@@ -119,17 +121,22 @@ void MainWindow::render_world()
     world_->read(world_json);
 
     // RENDER PLAYER
-    ui->world_gv->scene()->addEllipse(
-        QRect{world_->get_player().position() - QPoint{5, 5}, world_->get_player().position() + QPoint{5, 5}},
-        QPen{Qt::red});
+    playerMarker_ = new QGraphicsEllipseItem(QRect{world_->get_player().position() - QPoint{5, 5}, world_->get_player().position() + QPoint{5, 5}});
+    playerMarker_->setPen(QPen(Qt::yellow));
+    playerMarker_->setVisible(false);
+    playerMarker_->setBrush(QBrush(Qt::yellow));
+    ui->world_gv->scene()->addItem(playerMarker_);
 
     // RENDER LINES
+    QPen pen;
+    pen.setColor(Qt::white);
+    pen.setWidth(4);
     for (const auto& polygon : world_->get_polygons())
     {
         const auto& lines = polygon.lines();
         for (auto line : lines)
         {
-            ui->world_gv->scene()->addLine(QLine(line.p0(), line.p1()), QPen{Qt::white});
+            ui->world_gv->scene()->addLine(QLine(line.p0(), line.p1()), pen);
         }
     }
 }
@@ -192,12 +199,14 @@ void MainWindow::walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree,
     {
         return;
     }
+    QPen pen(Qt::green);
+    pen.setWidth(2);
     // LEAF
     if (!bsp_tree->split_line.has_value() && !bsp_tree->lines.empty())
     {
         const auto& line = bsp_tree->lines[0];
         QGraphicsLineItem* partitionLine = new QGraphicsLineItem(QLine(line.p0(), line.p1()));
-        partitionLine->setPen(QPen(Qt::green));
+        partitionLine->setPen(pen);
         partitionLines.push_back(partitionLine);
     }
     // SPLIT NODE
@@ -206,7 +215,7 @@ void MainWindow::walkBspPartitionLines(std::shared_ptr<BspNode> bsp_tree,
         const auto& split_line = bsp_tree->split_line.value();
         const auto line = QLine(split_line.p0(), split_line.p1());
         QGraphicsLineItem* partitionLine = new QGraphicsLineItem(line);
-        partitionLine->setPen(QPen(Qt::green));
+        partitionLine->setPen(pen);
         partitionLines.push_back(partitionLine);
         walkBspPartitionLines(bsp_tree->front_node, partitionLines);
         walkBspPartitionLines(bsp_tree->back_node, partitionLines);
@@ -218,9 +227,11 @@ void MainWindow::createRenderLines()
     std::vector<WorldLine> ordered_lines;
     WalkBspTree(world_->get_player(), bspTree_, ordered_lines);
 
+    QPen pen(Qt::red);
+    pen.setWidth(4);
     for(const auto& line: ordered_lines){
         auto* renderLine = new QGraphicsLineItem({line.p0(), line.p1()});
-        renderLine->setPen(QPen(QColor::fromRgb(234, 124, 14)));
+        renderLine->setPen(pen);
         renderLines_.push_back(renderLine);
     }
     qDebug() << "Number of render lines: " << renderLines_.size();

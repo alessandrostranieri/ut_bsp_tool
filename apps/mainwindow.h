@@ -41,6 +41,7 @@ class MainWindow : public QMainWindow
     AlgorithmView algorithmView_ = AlgorithmView::BUILD_BSP;
     std::vector<QGraphicsLineItem*> partitionLines_;
     std::vector<QGraphicsLineItem*> renderLines_;
+    QGraphicsEllipseItem* playerMarker_;
 
   private slots:
 
