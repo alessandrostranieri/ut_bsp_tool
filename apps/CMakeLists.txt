@@ -1,5 +1,9 @@
 add_executable(bsp_tool
         main.cpp
+        treenode.cpp
+        treenode.h
+        crosshairgraphicsitem.cpp
+        crosshairgraphicsitem.h
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui

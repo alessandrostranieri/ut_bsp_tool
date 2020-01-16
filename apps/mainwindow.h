@@ -58,6 +58,8 @@ class MainWindow : public QMainWindow
   private:
     void render_world();
 
+    void initAlgorithmView();
+
     void createPartitionLines();
 
     void extendPartitionLines();

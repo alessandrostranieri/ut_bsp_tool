@@ -4,6 +4,8 @@
 #include "bsp/polygon.h"
 #include "bsp/world.h"
 #include "bsp/bsp.h"
+#include "treenode.h"
+#include "crosshairgraphicsitem.h"
 
 #include <QDebug>
 #include <QFile>
@@ -21,9 +23,13 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     world_ = std::make_unique<World>();
 
-    QGraphicsScene* scene = new QGraphicsScene;
-    ui->world_gv->setScene(scene);
-    scene->setBackgroundBrush(Qt::black);
+    QGraphicsScene* worldScene = new QGraphicsScene;
+    ui->world_gv->setScene(worldScene);
+    worldScene->setBackgroundBrush(Qt::black);
+
+    QGraphicsScene* algorithmScene = new QGraphicsScene;
+    ui->algorithm_gv->setScene(algorithmScene);
+    algorithmScene->setBackgroundBrush(Qt::black);
 }
 
 void MainWindow::init()
@@ -40,6 +46,7 @@ void MainWindow::init()
     ui->previousStepButton->setEnabled(false);
 
     ui->buildBspButton->click();
+    initAlgorithmView();
 }
 
 MainWindow::~MainWindow()
@@ -139,6 +146,12 @@ void MainWindow::render_world()
             ui->world_gv->scene()->addLine(QLine(line.p0(), line.p1()), pen);
         }
     }
+}
+
+void MainWindow::initAlgorithmView()
+{
+    auto* crosshairItem = new CrosshairGraphicsItem(QPointF{0, 0});
+    ui->algorithm_gv->scene()->addItem(crosshairItem);
 }
 
 void MainWindow::createPartitionLines()
